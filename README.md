@@ -1,5 +1,5 @@
 ### Hey there 👋
-- 🔭 I’m currently working on Projects Related to Machine Learning,Data Science & Python
+- 🔭 I’m currently working on Projects Related to AI.Machine Learning,Data Science & Python
 - 🎓I’m currently Pursuing Bachelors in Electronics at MNNIT Allahabad,INDIA.
 - 💬 Ask me about Everything
 - 📫 How to reach me: [srivatsavavuppala@gmail.com](mailto:srivatsavavuppala@gmail.com) 
