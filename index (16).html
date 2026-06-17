@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sri Vatsava Vuppala — Backend & GenAI Engineer</title>
+<meta name="description" content="Backend, AWS & Generative AI engineer. Agentic AI systems, serverless platforms, RAG applications." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:title" content="Sri Vatsava Vuppala — Backend & GenAI Engineer" />
+<meta property="og:description" content="Production-grade backend systems and agentic AI platforms on AWS. Serverless, RAG, LLM applications that ship." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Sri Vatsava Vuppala — Backend & GenAI Engineer" />
+<meta name="twitter:description" content="Production-grade backend systems and agentic AI platforms on AWS." />
+<meta name="twitter:image" content="og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#FAFAF7;
+  --ink:#0D0D10;
+  --ink-soft:#4A4A52;
+  --line:#E3E3DD;
+  --accent:#1F3DF0;
+  --accent-glow:#7B8CFF;
+  --card:#FFFFFF;
+  --display:'Space Grotesk',sans-serif;
+  --body:'Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--ink);font-family:var(--body);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+
+#progress{position:fixed;top:0;left:0;height:3px;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-glow));transform-origin:0 50%;transform:scaleX(0);z-index:200}
+
+/* cursor glow (desktop only) */
+#cursor-glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(31,61,240,.10) 0%,transparent 65%);
+  transform:translate(-50%,-50%);will-change:left,top;transition:opacity .4s}
+@media(hover:none){#cursor-glow{display:none}}
+
+/* ---------- Nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:20px 48px;transition:background .4s,box-shadow .4s,padding .4s}
+nav.scrolled{background:rgba(250,250,247,.82);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line);padding:14px 48px}
+.logo{font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--ink);text-decoration:none}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--ink-soft);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{font-family:var(--mono);font-size:12.5px;padding:9px 18px;border:1px solid var(--ink);border-radius:100px;color:var(--ink)!important;transition:background .25s,color .25s}
+.nav-cta:hover{background:var(--ink);color:#fff!important}
+/* nav shapeshifts to dark theme over dark panels */
+nav.on-dark .logo{color:#fff}
+nav.on-dark .nav-links a{color:rgba(255,255,255,.6)}
+nav.on-dark .nav-links a:hover{color:#fff}
+nav.on-dark .nav-cta{border-color:rgba(255,255,255,.45);color:#fff!important}
+nav.on-dark .nav-cta:hover{background:#fff;color:var(--ink)!important}
+nav.on-dark.scrolled{background:rgba(11,11,18,.78);box-shadow:0 1px 0 rgba(255,255,255,.08)}
+nav,.logo,.nav-links a{transition:color .35s,background .35s,border-color .35s,box-shadow .35s,padding .35s}
+
+/* ============================================================
+   PANEL SYSTEM — each panel pins; the NEXT covers it with a
+   DIFFERENT transition, declared via data-enter on the panel:
+     slide  : card slides over (hero exit)
+     wipe   : diagonal blade wipe
+     iris   : circular iris opens from center-bottom
+     zoom   : panel content zooms/settles, prev blurs away
+   ============================================================ */
+.stack{position:relative}
+.panel{position:sticky;top:0;min-height:100vh;background:var(--bg);overflow:hidden;will-change:transform,filter,clip-path}
+.panel-inner{max-width:1280px;margin:0 auto;padding:120px 48px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2;will-change:transform,opacity}
+/* tall panels: content exceeds one viewport — align top, generous padding */
+.panel-inner.tall{justify-content:flex-start;padding:140px 48px 140px}
+.panel.dark{background:#0B0B12;color:#fff}
+.panel[data-enter="slide"]{border-radius:32px 32px 0 0;box-shadow:0 -30px 90px rgba(13,13,16,.35)}
+
+/* futuristic grid + glow layers on dark panels */
+.panel.dark::before{content:'';position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(123,140,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(123,140,255,.06) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000 30%,transparent 75%)}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;z-index:0;will-change:transform;pointer-events:none}
+.orb-1{width:480px;height:480px;background:#1F3DF0;top:-160px;right:-120px}
+.orb-2{width:380px;height:380px;background:#5B2BD9;bottom:-140px;left:-100px;opacity:.35}
+
+/* HUD corner ticks on panel-inner of dark panels */
+.hud{position:absolute;top:88px;right:48px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:rgba(123,140,255,.55);text-align:right;line-height:2;z-index:2}
+.hud b{font-weight:400;color:rgba(255,255,255,.35)}
+
+/* ---------- Hero ---------- */
+.hero-eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.08em;margin-bottom:28px;opacity:0;animation:rise .8s .15s forwards;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:blink 2.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(52px,9.5vw,138px);line-height:.98;letter-spacing:-.03em}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:block;transform:translateY(110%);animation:lineUp 1s cubic-bezier(.16,1,.3,1) forwards}
+.hero h1 .line:nth-child(1) span{animation-delay:.25s}
+.hero h1 .line:nth-child(2) span{animation-delay:.4s}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{max-width:560px;margin-top:36px;font-size:17px;color:var(--ink-soft);opacity:0;animation:rise .8s .9s forwards}
+.hero-actions{margin-top:44px;display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:rise .8s 1.05s forwards}
+.btn{font-family:var(--mono);font-size:13.5px;padding:14px 28px;border-radius:100px;text-decoration:none;transition:transform .25s,box-shadow .25s,background .25s,color .25s;display:inline-block}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 10px 30px rgba(31,61,240,.3)}
+.btn-ghost{border:1px solid var(--line);color:var(--ink);background:var(--card)}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+.scroll-hint{position:absolute;bottom:40px;left:48px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.1em;display:flex;align-items:center;gap:10px;opacity:0;animation:rise .8s 1.3s forwards}
+.scroll-hint::after{content:'';width:44px;height:1px;background:var(--ink-soft);animation:pulseLine 2s infinite}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes lineUp{to{transform:translateY(0)}}
+@keyframes pulseLine{0%,100%{opacity:.3}50%{opacity:1}}
+.ghost{position:absolute;right:-2vw;bottom:-4vh;font-family:var(--display);font-weight:700;font-size:clamp(120px,22vw,340px);color:transparent;-webkit-text-stroke:1px var(--line);letter-spacing:-.04em;pointer-events:none;user-select:none;will-change:transform;z-index:0}
+
+/* ---------- shared ---------- */
+.section-label{font-family:var(--mono);font-size:12.5px;color:var(--accent);letter-spacing:.1em;margin-bottom:18px}
+.panel.dark .section-label{color:var(--accent-glow)}
+.section-title{font-family:var(--display);font-size:clamp(34px,5vw,58px);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin-bottom:56px;max-width:780px}
+.split .w{display:inline-block;overflow:hidden;vertical-align:top}
+.split .w i{display:inline-block;font-style:normal;transform:translateY(110%);transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.split.in .w i{transform:none}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:64px;align-items:start}
+.about-grid p{font-size:18px;color:var(--ink-soft);margin-bottom:22px}
+.about-grid p strong{color:var(--ink);font-weight:600}
+.stat-stack{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.stat{padding:26px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.stat b{font-family:var(--display);font-size:38px;font-weight:600}
+.stat span{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;white-space:nowrap;background:var(--card);margin-top:72px}
+.marquee-track{display:inline-flex;will-change:transform}
+.marquee-track span{font-family:var(--display);font-size:20px;font-weight:500;margin:0 28px;color:var(--ink-soft)}
+.marquee-track span i{font-style:normal;color:var(--accent);margin-right:28px}
+
+/* ---------- Skills / tech wall (dark) ---------- */
+.tech-wall{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(123,140,255,.16);border:1px solid rgba(123,140,255,.16);border-radius:18px;overflow:hidden}
+.tech{background:#0B0B12;padding:30px 22px;display:flex;flex-direction:column;align-items:center;gap:14px;transition:background .3s,transform .3s;position:relative}
+.tech:hover{background:#12122044;transform:translateY(-3px)}
+.tech img{width:34px;height:34px;object-fit:contain;filter:grayscale(1) brightness(1.6);transition:filter .3s,transform .3s}
+.tech:hover img{filter:none;transform:scale(1.12)}
+.tech span{font-family:var(--mono);font-size:11.5px;color:rgba(255,255,255,.55);letter-spacing:.05em;text-align:center}
+.tech:hover span{color:#fff}
+.skill-note{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.skill-note div{border-left:2px solid rgba(123,140,255,.4);padding-left:18px}
+.skill-note h4{font-family:var(--mono);font-size:12px;color:var(--accent-glow);letter-spacing:.1em;margin-bottom:8px}
+.skill-note p{font-size:14.5px;color:rgba(255,255,255,.55)}
+
+/* ---------- Projects ---------- */
+.project{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);margin-bottom:48px;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s}
+.project:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(13,13,16,.1)}
+.project-visual{min-height:380px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.pv-1{background:linear-gradient(135deg,#101225 0%,#1F3DF0 130%)}
+.pv-2{background:linear-gradient(135deg,#0E1A14 0%,#0FA968 140%)}
+.project-visual pre{font-family:var(--mono);font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.8;will-change:transform}
+.project-visual::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.025) 3px 4px)}
+.project-body{padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+.project-tag{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+.project-body h3{font-family:var(--display);font-size:30px;font-weight:600;margin-bottom:16px}
+.project-body p{font-size:16px;color:var(--ink-soft);margin-bottom:24px}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.chip{font-family:var(--mono);font-size:11.5px;padding:6px 13px;border:1px solid var(--line);border-radius:100px;color:var(--ink-soft)}
+.project-link{font-family:var(--mono);font-size:13px;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-weight:500}
+.project-link .pl-icon{width:16px;height:16px;flex-shrink:0}
+.project-link::after{content:'→';transition:transform .25s}
+.project-link:hover{color:var(--accent)}
+.project-link:hover::after{transform:translateX(5px)}
+
+.exp-band{background:linear-gradient(150deg,#101019,#14152b);color:#fff;border-radius:24px;padding:72px 64px;display:grid;grid-template-columns:1.3fr .7fr;gap:48px;align-items:center;border:1px solid rgba(123,140,255,.18);position:relative;overflow:hidden}
+.exp-band::before{content:'';position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:rgba(31,61,240,.35);filter:blur(80px)}
+.exp-band h2{font-family:var(--display);font-size:clamp(28px,3.6vw,42px);font-weight:600;line-height:1.15;margin-bottom:18px;position:relative}
+.exp-band p{color:rgba(255,255,255,.65);font-size:16.5px;position:relative}
+.exp-band .btn-ghost{background:transparent;border-color:rgba(255,255,255,.3);color:#fff;text-align:center}
+.exp-band .btn-ghost:hover{border-color:#fff;background:#fff;color:var(--ink)}
+.exp-band .actions{display:flex;flex-direction:column;gap:14px;position:relative}
+.cert-list{margin-top:26px;display:flex;flex-direction:column;gap:10px;position:relative}
+.cert-list div{font-family:var(--mono);font-size:12.5px;color:rgba(255,255,255,.55);display:flex;gap:10px}
+.cert-list div::before{content:'◆';color:var(--accent-glow);font-size:9px;padding-top:3px}
+
+/* ---------- Hobbies (interactive tilt cards) ---------- */
+.hobby-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;perspective:1100px}
+.hobby{background:linear-gradient(165deg,#12121f,#0B0B12);border:1px solid rgba(123,140,255,.18);border-radius:18px;padding:36px 20px 28px;display:flex;flex-direction:column;align-items:center;gap:16px;cursor:default;transform-style:preserve-3d;transition:border-color .3s,box-shadow .3s;will-change:transform;position:relative;overflow:hidden}
+.hobby::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--hx,50%) var(--hy,50%),rgba(123,140,255,.18) 0%,transparent 60%);opacity:0;transition:opacity .3s}
+.hobby:hover{border-color:rgba(123,140,255,.55);box-shadow:0 18px 50px rgba(31,61,240,.22)}
+.hobby:hover::before{opacity:1}
+.hobby .icon{font-size:40px;transform:translateZ(40px);transition:transform .3s;filter:grayscale(.4)}
+.hobby:hover .icon{transform:translateZ(60px) scale(1.18);filter:none}
+.hobby h4{font-family:var(--display);font-size:16px;font-weight:600;color:#fff;transform:translateZ(28px)}
+.hobby p{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:rgba(255,255,255,.45);text-align:center;transform:translateZ(18px)}
+.hobby .bar{width:100%;height:3px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
+.hobby .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-glow));transition:width 1s cubic-bezier(.16,1,.3,1)}
+.hobby.in .bar i{width:var(--lvl)}
+
+/* ---------- Contact ---------- */
+.contact h2{font-family:var(--display);font-size:clamp(44px,7.5vw,96px);font-weight:700;letter-spacing:-.03em;line-height:1.02;margin-bottom:36px;color:#fff}
+.contact h2 a{color:#fff;text-decoration:none;background-image:linear-gradient(var(--accent-glow),var(--accent-glow));background-size:0% 4px;background-repeat:no-repeat;background-position:0 96%;transition:background-size .5s cubic-bezier(.16,1,.3,1),color .3s}
+.contact h2 a:hover{background-size:100% 4px;color:var(--accent-glow)}
+.contact-meta{display:flex;gap:36px;flex-wrap:wrap}
+.contact-meta a{font-family:var(--mono);font-size:13.5px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s;display:inline-flex;align-items:center;gap:9px}
+.contact-meta .cm-icon{width:16px;height:16px;flex-shrink:0}
+.contact-meta a:hover{color:var(--accent-glow)}
+footer{padding:48px 0 8px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.4)}
+
+@media(max-width:880px){
+  nav{padding:16px 22px}
+  nav.scrolled{padding:12px 22px}
+  .nav-links a:not(.nav-cta){display:none}
+  .panel-inner{padding:96px 22px}
+  .scroll-hint{left:22px}
+  .hud{right:22px;top:80px}
+  .about-grid,.project,.exp-band{grid-template-columns:1fr}
+  .exp-band{padding:48px 30px}
+  .tech-wall{grid-template-columns:repeat(2,1fr)}
+  .skill-note{grid-template-columns:1fr}
+  .project-visual{min-height:240px}
+  .project-body{padding:36px 26px}
+  .hobby-grid{grid-template-columns:repeat(2,1fr)}
+  .panel-inner.tall{padding:110px 22px}
+  .ghost{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero h1 .line span{transform:none}
+  .hero-eyebrow,.hero-sub,.hero-actions,.scroll-hint{opacity:1}
+  .reveal{opacity:1;transform:none}
+  .split .w i{transform:none}
+  .panel{position:relative}
+  #cursor-glow{display:none}
+}
+
+/* brand icons (inline SVG, no CDN) */
+.bi{width:34px;height:34px;color:rgba(255,255,255,.82);transition:color .3s,transform .3s,filter .3s}
+.tech:hover .bi{transform:scale(1.14)}
+.tech:nth-child(1):hover .bi{color:#3776AB}.tech:nth-child(2):hover .bi{color:#FF9900}
+.tech:nth-child(3):hover .bi{color:#0078D4}.tech:nth-child(4):hover .bi{color:#009688}
+.tech:nth-child(5):hover .bi{color:#65d9a5}.tech:nth-child(6):hover .bi{color:#3178C6}
+.tech:nth-child(7):hover .bi{color:#5FA04E}.tech:nth-child(8):hover .bi{color:#61DAFB}
+.tech:nth-child(9):hover .bi{color:#fff}.tech:nth-child(10):hover .bi{color:#844FBA}
+.tech:nth-child(11):hover .bi{color:#F05032}.tech:nth-child(12):hover .bi{color:#fff}
+.hobby .icon .bi{width:42px;height:42px;color:rgba(255,255,255,.85)}
+.hobby:hover .ic-chess .bi{color:#fff;animation:knight .7s cubic-bezier(.34,1.56,.64,1)}
+@keyframes knight{0%{transform:none}35%{transform:translateY(-10px) rotate(-12deg)}70%{transform:translateY(0) rotate(4deg)}100%{transform:none}}
+.hobby:hover .ic-ps .bi{color:#0070D1;animation:pspulse 1.1s ease-in-out infinite}
+@keyframes pspulse{0%,100%{filter:drop-shadow(0 0 0 rgba(0,112,209,0))}50%{filter:drop-shadow(0 0 14px rgba(0,112,209,.9))}}
+.hobby:hover .ic-music .bi{color:#1DB954;animation:spin 2.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hobby:hover .ic-film .bi{color:#E50914;animation:flicker 1.6s steps(2) infinite}
+@keyframes flicker{0%,100%{opacity:1}25%{opacity:.55}50%{opacity:.9}75%{opacity:.65}}
+.hobby:hover .ic-travel .bi{color:#7B8CFF;animation:fly 1.4s ease-in-out infinite}
+@keyframes fly{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(8px,-8px) rotate(-8deg)}}
+@media(prefers-reduced-motion:reduce){.bi{animation:none!important}}
+
+.stat b{display:inline-block}
+.stat b.pop{animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.25);color:var(--accent)}100%{transform:scale(1)}}
+
+/* experience panel */
+.exp-grid{display:grid;grid-template-columns:1.5fr .8fr;gap:56px;align-items:start}
+.exp-role{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:26px;border-bottom:1px solid rgba(123,140,255,.2);flex-wrap:wrap}
+.exp-role h3{font-family:var(--display);font-size:30px;font-weight:600;color:#fff}
+.exp-co{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent-glow);margin-top:6px}
+.exp-dates{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:rgba(255,255,255,.45);border:1px solid rgba(123,140,255,.3);padding:8px 14px;border-radius:100px}
+.exp-domains{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.exp-domain{padding:28px 26px 28px 0;border-bottom:1px solid rgba(255,255,255,.09);position:relative;transition:padding-left .3s}
+.exp-domain:nth-child(odd){border-right:1px solid rgba(255,255,255,.09);padding-right:26px}
+.exp-domain:nth-child(even){padding-left:26px}
+.exp-domain:hover{background:linear-gradient(180deg,rgba(123,140,255,.05),transparent)}
+.ed-k{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--accent-glow);display:block;margin-bottom:10px}
+.exp-domain p{font-size:14.5px;color:rgba(255,255,255,.6)}
+.exp-side{border:1px solid rgba(123,140,255,.2);border-radius:18px;padding:32px 28px;background:linear-gradient(165deg,rgba(123,140,255,.06),transparent)}
+.exp-side h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--accent-glow);margin-bottom:16px}
+.exp-cta{display:flex;flex-direction:column;gap:12px;margin-top:30px}
+@media(max-width:880px){.exp-grid{grid-template-columns:1fr}.exp-domains{grid-template-columns:1fr}.exp-domain:nth-child(odd){border-right:none;padding-right:0}.exp-domain:nth-child(even){padding-left:0}}
+
+.hobby[data-sound]{cursor:pointer}
+.hobby.played{animation:cardThump .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes cardThump{0%{transform:scale(1)}40%{transform:scale(.96)}100%{transform:scale(1)}}
+.sound-hint{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-top:26px}
+.sound-hint b{color:var(--accent-glow);font-weight:400}
+
+/* ---------- boot sequence ---------- */
+#boot{position:fixed;inset:0;z-index:300;background:#07070C;display:flex;align-items:center;justify-content:center;transition:transform .7s cubic-bezier(.7,0,.3,1);cursor:pointer}
+#boot.done{transform:translateY(-100%)}
+#boot pre{font-family:var(--mono);font-size:13.5px;line-height:2.1;color:#9aa6ff;min-width:340px}
+#boot pre .ok{color:#3ddc84}
+#boot pre .dim{color:rgba(255,255,255,.35)}
+#boot .cur{display:inline-block;width:8px;height:15px;background:#9aa6ff;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+#boot .skip{position:absolute;bottom:28px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:rgba(255,255,255,.3)}
+/* ---------- command palette ---------- */
+#palette{position:fixed;inset:0;z-index:280;display:none;align-items:flex-start;justify-content:center;padding-top:16vh;background:rgba(7,7,12,.55);backdrop-filter:blur(6px)}
+#palette.open{display:flex}
+.pal-box{width:min(560px,92vw);background:rgba(16,16,26,.92);border:1px solid rgba(123,140,255,.3);border-radius:16px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.6);animation:palIn .22s cubic-bezier(.16,1,.3,1)}
+@keyframes palIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.pal-box input{width:100%;background:transparent;border:none;outline:none;padding:18px 20px;font-family:var(--mono);font-size:14.5px;color:#fff;border-bottom:1px solid rgba(123,140,255,.18)}
+.pal-box input::placeholder{color:rgba(255,255,255,.3)}
+.pal-list{max-height:320px;overflow-y:auto;padding:8px}
+.pal-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:14px;color:rgba(255,255,255,.75)}
+.pal-item .k{font-family:var(--mono);font-size:10.5px;color:rgba(123,140,255,.7);letter-spacing:.08em}
+.pal-item.sel,.pal-item:hover{background:rgba(123,140,255,.14);color:#fff}
+.pal-empty{padding:22px;text-align:center;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.35)}
+#pal-fab{position:fixed;right:22px;bottom:46px;z-index:120;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;padding:9px 14px;border-radius:100px;border:1px solid rgba(123,140,255,.4);background:rgba(16,16,26,.7);backdrop-filter:blur(8px);color:#9aa6ff;cursor:pointer;transition:border-color .25s,color .25s}
+#pal-fab:hover{border-color:#9aa6ff;color:#fff}
+/* ---------- telemetry strip ---------- */
+#telemetry{position:fixed;left:0;right:0;bottom:0;z-index:110;display:flex;gap:28px;justify-content:center;align-items:center;padding:6px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:rgba(154,166,255,.75);background:rgba(7,7,12,.72);backdrop-filter:blur(10px);border-top:1px solid rgba(123,140,255,.16)}
+#telemetry b{font-weight:400;color:rgba(255,255,255,.45)}
+#telemetry .live{width:6px;height:6px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84;animation:blink 2.2s infinite}
+@media(max-width:880px){#telemetry{gap:14px;font-size:9.5px}#telemetry .hide-m{display:none}#pal-fab{bottom:40px}}
+@media(prefers-reduced-motion:reduce){#boot{display:none!important}}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="boot"><pre id="boot-log"></pre><span class="skip">CLICK TO SKIP</span></div>
+
+<div id="palette" role="dialog" aria-label="Command palette">
+  <div class="pal-box">
+    <input id="pal-input" type="text" placeholder="Type a command or search…" autocomplete="off" spellcheck="false">
+    <div class="pal-list" id="pal-list"></div>
+  </div>
+</div>
+<button id="pal-fab" aria-label="Open command palette">⌘ K</button>
+
+<div id="telemetry">
+  <span style="display:flex;align-items:center;gap:7px"><span class="live"></span>STATUS · OPEN TO OPPORTUNITIES</span>
+  <span class="hide-m">IST <b id="tm-time">--:--:--</b></span>
+  <span class="hide-m">UPTIME <b id="tm-up">00:00</b></span>
+  <span>SCROLL <b id="tm-scroll">0%</b></span>
+</div>
+<div id="cursor-glow"></div>
+
+<nav id="nav">
+  <a class="logo" href="#">vuppala<span>.dev</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Stack</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#hobbies">Off Duty</a>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<div class="stack">
+
+  <!-- 1 HERO (exits as About SLIDES over it) -->
+  <section class="panel" data-panel>
+    <div class="panel-inner hero">
+      <div class="hero-eyebrow">SYSTEMS ONLINE · BACKEND · AWS · GENERATIVE AI</div>
+      <h1>
+        <span class="line"><span>Sri Vatsava</span></span>
+        <span class="line"><span>Vuppala<em>.</em></span></span>
+      </h1>
+      <p class="hero-sub">I build production-grade backend systems and agentic AI platforms on AWS — serverless architectures, RAG pipelines, and LLM applications that ship.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">View projects</a>
+        <a class="btn btn-ghost" href="resume.pdf" download>Download resume</a>
+      </div>
+      <div class="ghost" data-ghost>genai</div>
+      <div class="scroll-hint">SCROLL</div>
+    </div>
+  </section>
+
+  <!-- 2 ABOUT — enters: SLIDE (card over hero) -->
+  <section class="panel" id="about" data-panel data-enter="slide">
+    <div class="panel-inner">
+      <div class="section-label reveal">01 / ABOUT</div>
+      <h2 class="section-title split" data-split>Engineer who owns systems end-to-end — from architecture to production.</h2>
+      <div class="about-grid">
+        <div>
+          <p class="reveal d1">I'm a software engineer based in Hyderabad with <strong>3+ years of experience</strong> building backend, cloud, and generative AI systems for enterprise clients.</p>
+          <p class="reveal d2">My work spans <strong>agentic AI platforms, serverless event-driven architectures, real-time IoT systems, and conversational AI</strong> — designed on AWS, deployed with Terraform, and owned through the full SDLC.</p>
+          <p class="reveal d3">I care about systems that are simple, reliable, and actually make it to production.</p>
+        </div>
+        <div class="stat-stack">
+          <div class="stat reveal d1"><b data-count="3">0</b><span>+ YEARS IN PRODUCTION</span></div>
+          <div class="stat reveal d2"><b data-count="15">0</b><span>+ AWS SERVICES, ONE PLATFORM</span></div>
+          <div class="stat reveal d3"><b>AWS</b><span>SOLUTIONS ARCHITECT — ASSOCIATE</span></div>
+        </div>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track" id="marquee">
+          <span><i>◆</i>Python</span><span><i>◆</i>AWS</span><span><i>◆</i>FastAPI</span><span><i>◆</i>Amazon Bedrock</span><span><i>◆</i>LangChain</span><span><i>◆</i>RAG</span><span><i>◆</i>Terraform</span><span><i>◆</i>TypeScript</span><span><i>◆</i>React</span><span><i>◆</i>Node.js</span><span><i>◆</i>MCP Servers</span><span><i>◆</i>Event-Driven</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 STACK — enters: WIPE (diagonal blade) -->
+  <section class="panel dark" id="skills" data-panel data-enter="wipe">
+    <div class="orb orb-1" data-orb="1"></div>
+    <div class="orb orb-2" data-orb="2"></div>
+    <div class="hud">SEC.02 / TECH_STACK<br><b>LAT 17.38 · LON 78.48</b></div>
+    <div class="panel-inner">
+      <div class="section-label reveal">02 / STACK</div>
+      <h2 class="section-title split" data-split>The tools I ship with.</h2>
+      <div class="tech-wall reveal">
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></svg><span>Python</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.375 6.18 6.18 0 0 1-.248-.471c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.031-.863.103-.295.072-.583.16-.862.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.151c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586zm-3.24 1.214c.263 0 .534-.048.822-.144.287-.096.543-.271.758-.51.128-.152.224-.32.272-.512.047-.191.08-.423.08-.694v-.335a6.66 6.66 0 0 0-.735-.136 6.02 6.02 0 0 0-.75-.048c-.535 0-.926.104-1.19.32-.263.215-.39.518-.39.917 0 .375.095.655.295.846.191.2.47.296.838.296zm6.41.862c-.144 0-.24-.024-.304-.08-.064-.048-.12-.16-.168-.311L7.586 5.55a1.398 1.398 0 0 1-.072-.32c0-.128.064-.2.191-.2h.783c.151 0 .255.025.31.08.065.048.113.16.16.312l1.342 5.284 1.245-5.284c.04-.16.088-.264.151-.312a.549.549 0 0 1 .32-.08h.638c.152 0 .256.025.32.08.063.048.12.16.151.312l1.261 5.348 1.381-5.348c.048-.16.104-.264.16-.312a.52.52 0 0 1 .311-.08h.743c.127 0 .2.065.2.2 0 .04-.009.08-.017.128a1.137 1.137 0 0 1-.056.2l-1.923 6.17c-.048.16-.104.263-.168.311a.51.51 0 0 1-.303.08h-.687c-.151 0-.255-.024-.32-.08-.063-.056-.119-.16-.15-.32l-1.238-5.148-1.23 5.14c-.04.16-.087.264-.15.32-.065.056-.177.08-.32.08zm10.256.215c-.415 0-.83-.048-1.229-.143-.399-.096-.71-.2-.918-.32-.128-.071-.215-.151-.247-.223a.563.563 0 0 1-.048-.224v-.407c0-.167.064-.247.183-.247.048 0 .096.008.144.024.048.016.12.048.2.08.271.12.566.215.878.279.319.064.63.096.95.096.502 0 .894-.088 1.165-.264a.86.86 0 0 0 .415-.758.777.777 0 0 0-.215-.559c-.144-.151-.416-.287-.807-.415l-1.157-.36c-.583-.183-1.014-.454-1.277-.813a1.902 1.902 0 0 1-.4-1.158c0-.335.073-.63.216-.886.144-.255.335-.479.575-.654.24-.184.51-.32.83-.415.32-.096.655-.136 1.006-.136.175 0 .359.008.535.032.183.024.35.056.518.088.16.04.312.08.455.127.144.048.256.096.336.144a.69.69 0 0 1 .24.2.43.43 0 0 1 .071.263v.375c0 .168-.064.256-.184.256a.83.83 0 0 1-.303-.096 3.652 3.652 0 0 0-1.532-.311c-.455 0-.815.071-1.062.223-.248.152-.375.383-.375.71 0 .224.08.416.24.567.159.152.454.304.877.44l1.134.358c.574.184.99.44 1.237.767.247.327.367.702.367 1.117 0 .343-.072.655-.207.926-.144.272-.336.511-.583.703-.248.2-.543.343-.886.447-.36.111-.734.167-1.142.167zM21.698 16.207c-2.626 1.94-6.442 2.969-9.722 2.969-4.598 0-8.74-1.7-11.87-4.526-.247-.223-.024-.527.272-.351 3.384 1.963 7.559 3.153 11.877 3.153 2.914 0 6.114-.607 9.06-1.852.439-.2.814.287.383.607zM22.792 14.961c-.336-.43-2.22-.207-3.074-.103-.255.032-.295-.192-.063-.36 1.5-1.053 3.967-.75 4.254-.399.287.36-.08 2.826-1.485 4.007-.215.184-.423.088-.327-.151.32-.79 1.03-2.57.695-2.994z"/></svg><span>AWS</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.379 23.343a1.62 1.62 0 0 0 1.536-2.14v.002L17.35 1.76A1.62 1.62 0 0 0 15.816.657H8.184A1.62 1.62 0 0 0 6.65 1.76L.086 21.204a1.62 1.62 0 0 0 1.536 2.139h4.741a1.62 1.62 0 0 0 1.535-1.103l.977-2.892 4.947 3.675c.28.208.618.32.966.32m-3.084-12.531 3.624 10.739a.54.54 0 0 1-.51.713v-.001h-.03a.54.54 0 0 1-.322-.106l-9.287-6.9h4.853m6.313 7.006c.116-.326.13-.694.007-1.058L9.79 1.76a1.722 1.722 0 0 0-.007-.02h6.034a.54.54 0 0 1 .512.366l6.562 19.445a.54.54 0 0 1-.338.684"/></svg><span>Azure</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .0387C5.3729.0384.0003 5.3931 0 11.9988c-.001 6.6066 5.372 11.9628 12 11.9625 6.628.0003 12.001-5.3559 12-11.9625-.0003-6.6057-5.3729-11.9604-12-11.96m-.829 5.4153h7.55l-7.5805 5.3284h5.1828L5.279 18.5436q2.9466-6.5444 5.892-13.0896"/></svg><span>FastAPI</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.796 0a6.93 6.93 0 0 0-4.91 2.019L5.451 5.455l3.273 3.27 3.432-3.432a2.284 2.284 0 0 1 3.277 0 2.28 2.28 0 0 1 0 3.275L12 12.001l3.273 3.273 3.433-3.435c2.692-2.692 2.692-7.127 0-9.82A6.92 6.92 0 0 0 13.796 0m-5.07 8.728-3.433 3.434c-2.692 2.693-2.692 7.126 0 9.819A6.92 6.92 0 0 0 10.203 24a6.93 6.93 0 0 0 4.911-2.02l3.432-3.432-3.271-3.272-3.433 3.433a2.284 2.284 0 0 1-3.277 0 2.28 2.28 0 0 1 0-3.276L12 12z"/></svg><span>LangChain</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/></svg><span>TypeScript</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.91,19.099,13.993z"/></svg><span>Node.js</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg><span>React</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z"/></svg><span>Next.js</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.44 0v7.575l6.561 3.79V3.787zm21.12 4.227l-6.561 3.791v7.574l6.56-3.787zM8.72 4.23v7.575l6.561 3.787V8.018zm0 8.405v7.575L15.28 24v-7.578z"/></svg><span>Terraform</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.09 23.549a1.54 1.54 0 0 1-2.18 0L.451 13.089a1.54 1.54 0 0 1 0-2.179l7.191-7.19 2.733 2.733a1.85 1.85 0 0 0 .964 2.326v6.66a1.849 1.849 0 1 0 1.54 0V8.957l2.508 2.508a1.85 1.85 0 1 0 1.09-1.09l-2.634-2.634a1.85 1.85 0 0 0-2.378-2.377L8.73 2.63 10.91.451a1.54 1.54 0 0 1 2.179 0l10.459 10.46a1.54 1.54 0 0 1 0 2.179z"/></svg><span>Git</span></div>
+        <div class="tech"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>GitHub</span></div>
+      </div>
+      <div class="skill-note">
+        <div class="reveal d1"><h4>AI / ML</h4><p>Generative AI, LLMs, RAG, Amazon Bedrock, agentic systems, prompt engineering, LLM guardrails, MCP servers</p></div>
+        <div class="reveal d2"><h4>ARCHITECTURE</h4><p>Event-driven serverless, microservices, REST APIs, OAuth 2.0, real-time IoT pipelines</p></div>
+        <div class="reveal d3"><h4>OPS</h4><p>Terraform IaC, CI/CD, CloudWatch observability, full SDLC ownership</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 PROJECTS — enters: IRIS (circular reveal) -->
+  <section class="panel" id="projects" data-panel data-enter="iris">
+    <div class="panel-inner tall">
+      <div class="section-label reveal">03 / PERSONAL PROJECTS</div>
+      <h2 class="section-title split" data-split>Things I've built on my own time.</h2>
+
+      <div class="project reveal">
+        <div class="project-visual pv-1"><pre data-parallax>
+$ reposense analyze ./repo
+→ embedding 482 files...
+→ pinecone index: ready
+→ ask anything about this repo
+
+> "where is auth handled?"
+  src/middleware/auth.py:42</pre></div>
+        <div class="project-body">
+          <div class="project-tag">RAG · LLM · BROWSER EXTENSION</div>
+          <h3>RepoSense AI</h3>
+          <p>A Chrome/Edge extension that lets you chat with any GitHub repository. RAG over a Pinecone vector index, powered by Groq LLM, with a FastAPI backend on Vercel serverless.</p>
+          <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Groq</span><span class="chip">Pinecone</span><span class="chip">RAG</span><span class="chip">Vercel</span></div>
+          <div style="display:flex;gap:26px;flex-wrap:wrap"><a class="project-link" href="https://github.com/srivatsavavuppala/xtension" target="_blank" rel="noopener"><svg class="pl-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>View on GitHub</a><a class="project-link" href="https://microsoftedge.microsoft.com/addons/detail/github-repo-summarizer/mphnlfgekfkihcapjaofipilleifnold" target="_blank" rel="noopener"><svg class="pl-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.86 17.86q.14 0 .25.12.1.13.1.25t-.11.33l-.32.46-.43.53-.44.5q-.21.25-.38.42l-.22.23q-.58.53-1.34 1.04-.76.51-1.6.91-.86.4-1.74.64t-1.67.24q-.9 0-1.69-.28-.8-.28-1.48-.78-.68-.5-1.22-1.17-.53-.66-.92-1.44-.38-.77-.58-1.6-.2-.83-.2-1.67 0-1 .32-1.96.33-.97.87-1.8.14.95.55 1.77.41.82 1.02 1.5.6.68 1.38 1.21.78.54 1.64.9.86.36 1.77.56.92.2 1.8.2 1.12 0 2.18-.24 1.06-.23 2.06-.72l.2-.1.2-.05zm-15.5-1.27q0 1.1.27 2.15.27 1.06.78 2.03.51.96 1.24 1.77.74.82 1.66 1.4-1.47-.2-2.8-.74-1.33-.55-2.48-1.37-1.15-.83-2.08-1.9-.92-1.07-1.58-2.33T.36 14.94Q0 13.54 0 12.06q0-.81.32-1.49.31-.68.83-1.23.53-.55 1.2-.96.66-.4 1.35-.66.74-.27 1.5-.39.78-.12 1.55-.12.7 0 1.42.1.72.12 1.4.35.68.23 1.32.57.63.35 1.16.83-.35 0-.7.07-.33.07-.65.23v-.02q-.63.28-1.2.74-.57.46-1.05 1.04-.48.58-.87 1.26-.38.67-.65 1.39-.27.71-.42 1.44-.15.72-.15 1.38zM11.96.06q1.7 0 3.33.39 1.63.38 3.07 1.15 1.43.77 2.62 1.93 1.18 1.16 1.98 2.7.49.94.76 1.96.28 1 .28 2.08 0 .89-.23 1.7-.24.8-.69 1.48-.45.68-1.1 1.22-.64.53-1.45.88-.54.24-1.11.36-.58.13-1.16.13-.42 0-.97-.03-.54-.03-1.1-.12-.55-.1-1.05-.28-.5-.19-.84-.5-.12-.09-.23-.24-.1-.16-.1-.33 0-.15.16-.35.16-.2.35-.5.2-.28.36-.68.16-.4.16-.95 0-1.06-.4-1.96-.4-.91-1.06-1.64-.66-.74-1.52-1.28-.86-.55-1.79-.89-.84-.3-1.72-.44-.87-.14-1.76-.14-1.55 0-3.06.45T.94 7.55q.71-1.74 1.81-3.13 1.1-1.38 2.52-2.35Q6.68 1.1 8.37.58q1.7-.52 3.58-.52Z"/></svg>Edge Add-ons</a></div>
+        </div>
+      </div>
+
+      <div class="project reveal">
+        <div class="project-visual pv-2"><pre data-parallax>
+$ hackathon: 40+ teams
+→ result: Grand Runner-Up
+
+[live interview] transcribing...
+[analytics] scoring candidate...
+status: hiring insights ready</pre></div>
+        <div class="project-body">
+          <div class="project-tag">HACKATHON · GRAND RUNNER-UP</div>
+          <h3>AI-Powered HR Recruitment Platform</h3>
+          <p>Built in a 36-hour hackathon among 40+ teams — an end-to-end AI recruitment platform using Groq LLMs for interview generation, candidate assessment, and hiring insights, with real-time voice interviews, live transcription, and analytics dashboards.</p>
+          <div class="chip-row"><span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">React.js</span><span class="chip">Groq LLM</span><span class="chip">Real-time Voice</span></div>
+          <a class="project-link" href="https://github.com/srivatsavavuppala/team-complexity_project" target="_blank" rel="noopener"><svg class="pl-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>View on GitHub</a>
+        </div>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <!-- EXPERIENCE — enters: ZOOM -->
+  <section class="panel dark" id="experience" data-panel data-enter="zoom">
+    <div class="orb orb-1" data-orb="1"></div>
+    <div class="hud">SEC.04 / EXPERIENCE<br><b>UPTIME · 3+ YEARS</b></div>
+    <div class="panel-inner">
+      <div class="section-label reveal">04 / EXPERIENCE</div>
+      <h2 class="section-title split" data-split>Where the production miles come from.</h2>
+      <div class="exp-grid">
+        <div class="exp-main reveal">
+          <div class="exp-role">
+            <div>
+              <h3>Software Engineer</h3>
+              <p class="exp-co">TRIANZ · HYDERABAD</p>
+            </div>
+            <span class="exp-dates">AUG 2023 — PRESENT</span>
+          </div>
+          <div class="exp-domains">
+            <div class="exp-domain reveal d1"><span class="ed-k">AGENTIC AI</span><p>Multi-agent LLM platforms on Amazon Bedrock — legacy code analysis, automated SDLC artifacts, OAuth-integrated pipelines.</p></div>
+            <div class="exp-domain reveal d2"><span class="ed-k">CONVERSATIONAL AI</span><p>Multilingual contact-center AI with prompt engineering and LLM guardrails for safe, compliant responses.</p></div>
+            <div class="exp-domain reveal d3"><span class="ed-k">REAL-TIME IOT</span><p>Fleet monitoring across 15+ AWS services — edge compute, live video streaming, ML event inference.</p></div>
+            <div class="exp-domain reveal d3"><span class="ed-k">SERVERLESS PLATFORMS</span><p>Event-driven systems with Lambda, API Gateway, DynamoDB and Cognito — owned from architecture to production.</p></div>
+          </div>
+        </div>
+        <aside class="exp-side reveal d2">
+          <h4>CERTIFICATIONS</h4>
+          <div class="cert-list">
+            <div>AWS Certified Solutions Architect – Associate</div>
+            <div>Building AI Agents with MCP — DeepLearning.AI</div>
+            <div>Prompt Engineering for Developers — DeepLearning.AI</div>
+          </div>
+          <div class="exp-cta">
+            <a class="btn btn-ghost" href="resume.pdf" download>Download resume (PDF)</a>
+            <a class="btn btn-ghost" href="https://linkedin.com/in/srivatsava-vuppala" target="_blank" rel="noopener">LinkedIn profile</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 HOBBIES — enters: SLIDE, interactive tilt cards -->
+  <section class="panel dark" id="hobbies" data-panel data-enter="slide">
+    <div class="orb orb-2" data-orb="2"></div>
+    <div class="hud">SEC.05 / OFF_DUTY<br><b>STATUS · RECHARGING</b></div>
+    <div class="panel-inner">
+      <div class="section-label reveal">05 / OFF DUTY</div>
+      <h2 class="section-title split" data-split>What I do when the deploys are green.</h2>
+      <div class="hobby-grid">
+        <div class="hobby reveal" data-tilt data-sound="chess" style="--lvl:78%"><div class="icon ic-chess"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10.457 6.161a.237.237 0 0 0-.296.165c-.8 2.785 2.819 5.579 5.214 7.428.653.504 1.216.939 1.591 1.292 1.745 1.642 2.564 2.851 2.733 3.178a.24.24 0 0 0 .275.122c.047-.013 4.726-1.3 3.934-4.574a.257.257 0 0 0-.023-.06L18.204 3.407 18.93.295a.24.24 0 0 0-.262-.293c-1.7.201-3.115.435-4.5 1.425-4.844-.323-8.718.9-11.213 3.539C.334 7.737-.246 11.515.085 14.128c.763 5.655 5.191 8.631 9.081 9.532.993.229 1.974.34 2.923.34 3.344 0 6.297-1.381 7.946-3.85a.24.24 0 0 0-.372-.3c-3.411 3.527-9.002 4.134-13.296 1.444-4.485-2.81-6.202-8.41-3.91-12.749C4.741 4.221 8.801 2.362 13.888 3.31c.056.01.115 0 .165-.029l.335-.197c.926-.546 1.961-1.157 2.873-1.279l-.694 1.993a.243.243 0 0 0 .02.202l6.082 10.192c-.193 2.028-1.706 2.506-2.226 2.611-.287-.645-.814-1.364-2.306-2.803-.422-.407-1.21-.941-2.124-1.56-2.364-1.601-5.937-4.02-5.391-5.984a.239.239 0 0 0-.165-.295z"/></svg></div><h4>Chess</h4><p>QUEEN'S GAMBIT ENJOYER</p><div class="bar"><i></i></div></div>
+        <div class="hobby reveal d1" data-tilt data-sound="console" style="--lvl:88%"><div class="icon ic-ps"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.984 2.596v17.547l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.18.76.814.76 1.505v5.875c2.441 1.193 4.362-.002 4.362-3.152 0-3.237-1.126-4.675-4.438-5.827-1.307-.448-3.728-1.186-5.39-1.502zm4.656 16.241l6.296-2.275c.715-.258.826-.625.246-.818-.586-.192-1.637-.139-2.357.123l-4.205 1.5V14.98l.24-.085s1.201-.42 2.913-.615c1.696-.18 3.785.03 5.437.661 1.848.601 2.04 1.472 1.576 2.072-.465.6-1.622 1.036-1.622 1.036l-8.544 3.107V18.86zM1.807 18.6c-1.9-.545-2.214-1.668-1.352-2.32.801-.586 2.16-1.052 2.16-1.052l5.615-2.013v2.313L4.205 17c-.705.271-.825.632-.239.826.586.195 1.637.15 2.343-.12L8.247 17v2.074c-.12.03-.256.044-.39.073-1.939.331-3.996.196-6.038-.479z"/></svg></div><h4>PS5</h4><p>TROPHY HUNTING SEASON</p><div class="bar"><i></i></div></div>
+        <div class="hobby reveal d2" data-tilt data-sound="vinyl" style="--lvl:92%"><div class="icon ic-music"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div><h4>Music</h4><p>ALWAYS ON · ALL GENRES</p><div class="bar"><i></i></div></div>
+        <div class="hobby reveal d3" data-tilt data-sound="cinema" style="--lvl:85%"><div class="icon ic-film"><svg class="bi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m5.398 0 8.348 23.602c2.346.059 4.856.398 4.856.398L10.113 0H5.398zm8.489 0v9.172l4.715 13.33V0h-4.715zM5.398 1.5V24c1.873-.225 2.81-.312 4.715-.398V14.83L5.398 1.5z"/></svg></div><h4>Movies</h4><p>ONE MORE BEFORE BED</p><div class="bar"><i></i></div></div>
+        <div class="hobby reveal d3" data-tilt data-sound="jet" style="--lvl:70%"><div class="icon ic-travel"><svg class="bi plane" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2.5 19.5 21.5 12 2.5 4.5v6l13 1.5-13 1.5v6z"/></svg></div><h4>Travelling</h4><p>NEXT DESTINATION LOADING</p><div class="bar"><i></i></div></div>
+      </div>
+      <p class="sound-hint reveal"><b>▶</b> CLICK A CARD — SOUND ON</p>
+    </div>
+  </section>
+
+  <!-- 6 CONTACT — enters: ZOOM (settles in, prev blurs out) -->
+  <section class="panel dark" id="contact" data-panel data-enter="zoom">
+    <div class="orb orb-1" data-orb="1"></div>
+    <div class="hud">SEC.06 / CONTACT<br><b>CHANNEL OPEN</b></div>
+    <div class="panel-inner contact">
+      <div class="section-label reveal">06 / CONTACT</div>
+      <h2 class="split" data-split>Let's build something <a href="mailto:srivatsavavuppala@gmail.com">worth shipping.</a></h2>
+      <div class="contact-meta reveal d1">
+        <a href="mailto:srivatsavavuppala@gmail.com"><svg class="cm-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/></svg>srivatsavavuppala@gmail.com</a>
+        <a href="https://github.com/srivatsavavuppala" target="_blank" rel="noopener"><svg class="cm-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+        <a href="https://linkedin.com/in/srivatsava-vuppala" target="_blank" rel="noopener"><svg class="cm-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/></svg>LinkedIn</a>
+        <a href="tel:+918688709694"><svg class="cm-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/></svg>+91 86887 09694</a>
+      </div>
+      <footer>
+        <div>© 2026 Sri Vatsava Vuppala</div>
+        <div>Hyderabad, India</div>
+      </footer>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const nav=document.getElementById('nav');
+
+/* split titles into word spans (keeps links intact) */
+document.querySelectorAll('[data-split]').forEach(el=>{
+  const splitNode=node=>{
+    if(node.nodeType===3){
+      const frag=document.createDocumentFragment();
+      node.textContent.split(/\s+/).filter(Boolean).forEach(w=>{
+        const wrap=document.createElement('span');wrap.className='w';
+        const inner=document.createElement('i');inner.textContent=w;
+        wrap.appendChild(inner);frag.appendChild(wrap);frag.append(' ');
+      });
+      node.replaceWith(frag);
+    } else if(node.childNodes){[...node.childNodes].forEach(splitNode);}
+  };
+  splitNode(el);
+});
+
+/* reveal observer + counters */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  e.target.classList.add('in');io.unobserve(e.target);
+  e.target.querySelectorAll('[data-count]').forEach(c=>{
+    const end=+c.dataset.count,t0=performance.now(),dur=1500;
+    const tick=t=>{
+      const p=Math.min((t-t0)/dur,1);
+      if(p<.55){ // scramble phase — digits spin like a slot machine
+        c.textContent=Math.floor(Math.random()*Math.max(end*2.4,20));
+      }else{    // settle phase — ease into the real number
+        const q=(p-.55)/.45;
+        c.textContent=Math.round(end*(1-Math.pow(1-q,3)));
+      }
+      if(p<1)requestAnimationFrame(tick);
+      else{c.textContent=end;c.classList.add('pop');setTimeout(()=>c.classList.remove('pop'),500);}
+    };
+    requestAnimationFrame(tick);
+  });
+}),{threshold:.15});
+document.querySelectorAll('.reveal,[data-split]').forEach(el=>io.observe(el));
+
+/* cursor glow */
+const glow=document.getElementById('cursor-glow');
+let gx=innerWidth/2,gy=innerHeight/2,tx=gx,ty=gy;
+addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY},{passive:true});
+
+/* ============================================================
+   SCROLL ENGINE — each panel declares its OWN entrance via
+   data-enter. The engine computes "covered" (0→1) for every
+   panel pair and applies a different transition per type:
+     slide : card slides over; prev scales+dims
+     wipe  : diagonal blade — entering panel's top edge is a
+             moving diagonal clip; prev shears slightly
+     iris  : entering panel opens as an expanding circle;
+             prev desaturates and recedes
+     zoom  : entering content scales 1.12→1 + fades in;
+             prev blurs and falls away
+   ============================================================ */
+const panels=[...document.querySelectorAll('[data-panel]')];
+const marquee=document.getElementById('marquee');
+if(marquee)marquee.innerHTML+=marquee.innerHTML;
+const ghost=document.querySelector('[data-ghost]');
+const parallaxEls=[...document.querySelectorAll('[data-parallax]')];
+const orbs=[...document.querySelectorAll('[data-orb]')];
+const progress=document.getElementById('progress');
+
+let cur=scrollY,vel=0,mx=0;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=x=>x*x*x*(x*(x*6-15)+10); // smootherstep — softer in/out
+
+/* tall panels (content > 100vh) must scroll fully before pinning:
+   pin them bottom-aligned instead of top:0 */
+function sizePanels(){
+  panels.forEach(p=>{
+    const overflow=p.offsetHeight-innerHeight;
+    p.style.top=overflow>0?`-${overflow}px`:'0px';
+  });
+}
+addEventListener('resize',sizePanels);
+addEventListener('load',sizePanels);
+sizePanels();
+
+/* hobby tilt cards */
+document.querySelectorAll('[data-tilt]').forEach(card=>{
+  card.addEventListener('pointermove',e=>{
+    if(reduce)return;
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    card.style.setProperty('--hx',x*100+'%');
+    card.style.setProperty('--hy',y*100+'%');
+    card.style.transform=`rotateY(${(x-.5)*16}deg) rotateX(${(.5-y)*14}deg) translateY(-4px)`;
+  });
+  card.addEventListener('pointerleave',()=>{card.style.transform='';});
+});
+
+function frame(){
+  const target=scrollY;
+  vel=lerp(vel,target-cur,.09);
+  cur=lerp(cur,target,.09);
+  const vh=innerHeight;
+
+  /* nav shapeshifts per panel underneath it */
+  nav.classList.toggle('scrolled',target>40);
+  let onDark=false;
+  for(const p of panels){
+    const r=p.getBoundingClientRect();
+    if(r.top<=60&&r.bottom>60){onDark=p.classList.contains('dark');}
+  }
+  nav.classList.toggle('on-dark',onDark);
+  const max=document.documentElement.scrollHeight-vh;
+  progress.style.transform=`scaleX(${max?target/max:0})`;
+
+  /* cursor glow follows with lag */
+  gx=lerp(gx,tx,.08);gy=lerp(gy,ty,.08);
+  glow.style.left=gx+'px';glow.style.top=gy+'px';
+
+  if(!reduce){
+    panels.forEach((p,i)=>{
+      const next=panels[i+1];
+      if(!next)return;
+      const r=next.getBoundingClientRect();
+      const rawCovered=smooth(1-Math.min(Math.max(r.top/vh,0),1));
+      p._cov=lerp(p._cov??rawCovered,rawCovered,.16); // eased, frame-smoothed
+      const covered=p._cov;
+      const mode=next.dataset.enter||'slide';
+      const inner=next.querySelector('.panel-inner');
+
+      /* exiting panel */
+      if(mode==='slide'){
+        p.style.transform=`scale(${1-covered*.07}) translateY(${covered*-30}px)`;
+        p.style.filter=`brightness(${1-covered*.35})`;
+      }else if(mode==='wipe'){
+        p.style.transform=`skewY(${covered*-1.5}deg) scale(${1-covered*.04})`;
+        p.style.filter=`brightness(${1-covered*.3})`;
+      }else if(mode==='iris'){
+        p.style.transform=`scale(${1-covered*.05})`;
+        p.style.filter=`saturate(${1-covered*.8}) brightness(${1-covered*.25})`;
+      }else if(mode==='zoom'){
+        p.style.transform=`scale(${1-covered*.1}) translateY(${covered*-40}px)`;
+        p.style.filter=`blur(${covered*6}px) brightness(${1-covered*.3})`;
+      }
+
+      /* entering panel */
+      if(rawCovered>.001&&rawCovered<.999){
+        if(mode==='wipe'){
+          const a=(1-covered)*14; // diagonal angle in vh units
+          next.style.clipPath=`polygon(0 ${a}vh,100% 0,100% 100%,0 100%)`;
+        }else if(mode==='iris'){
+          // viewport-anchored: tall panels' % coords break, so use px
+          const cy=vh*.8-r.top;                       // viewport 80% line in panel coords
+          const maxR=Math.hypot(innerWidth,next.offsetHeight)*.75;
+          const rad=vh*.12+covered*maxR;
+          next.style.clipPath=`circle(${rad}px at 50% ${cy}px)`;
+        }else{
+          next.style.clipPath='';
+        }
+        if(mode==='zoom'&&inner){
+          inner.style.transform=`scale(${1.12-covered*.12})`;
+          inner.style.opacity=Math.min(covered*1.6,1);
+        }
+      }else{
+        next.style.clipPath='';
+        if(inner&&mode==='zoom'){inner.style.transform='';inner.style.opacity='';}
+      }
+    });
+
+    /* marquee: base drift + velocity, skew by velocity */
+    if(marquee){
+      mx-=1.1+Math.min(Math.abs(vel)*.4,18);
+      const half=marquee.scrollWidth/2;
+      if(-mx>=half)mx+=half;
+      marquee.style.transform=`translateX(${mx}px) skewX(${Math.max(Math.min(vel*.35,12),-12)}deg)`;
+    }
+
+    if(ghost)ghost.style.transform=`translateY(${cur*-.18}px) translateX(${cur*.06}px)`;
+
+    parallaxEls.forEach(el=>{
+      const r=el.getBoundingClientRect();
+      const c=(r.top+r.height/2-vh/2)/vh;
+      el.style.transform=`translateY(${c*-34}px) rotate(${c*-2}deg)`;
+    });
+
+    orbs.forEach((o,i)=>{
+      o.style.transform=`translateY(${cur*(i%2?.04:-.06)}px)`;
+    });
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ============================================================
+   SOUND ENGINE — original Web Audio synthesis per hobby.
+   No copyrighted brand audio; each sound is generated in code.
+   ============================================================ */
+let actx;
+const A=()=>actx||(actx=new (window.AudioContext||window.webkitAudioContext)());
+const out=(ctx,v=0.6)=>{const g=ctx.createGain();g.gain.value=v;g.connect(ctx.destination);return g};
+
+const SOUNDS={
+  /* wooden chess piece placed on board: short filtered noise knock */
+  chess(){const c=A(),t=c.currentTime,g=out(c,.7);
+    const buf=c.createBuffer(1,c.sampleRate*.09,c.sampleRate);
+    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3);
+    const src=c.createBufferSource();src.buffer=buf;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=900;f.Q.value=1.2;
+    src.connect(f);f.connect(g);src.start(t);
+    const o=c.createOscillator(),og=c.createGain();o.type='sine';o.frequency.setValueAtTime(180,t);
+    o.frequency.exponentialRampToValueAtTime(70,t+.09);og.gain.setValueAtTime(.5,t);og.gain.exponentialRampToValueAtTime(.001,t+.12);
+    o.connect(og);og.connect(g);o.start(t);o.stop(t+.13);},
+
+  /* console power-on: rising pure-tone chime with soft shimmer */
+  console(){const c=A(),t=c.currentTime,g=out(c,.4);
+    [[392,0,.9],[587.33,.12,.9],[783.99,.24,1.1]].forEach(([fr,dt,dur])=>{
+      const o=c.createOscillator(),og=c.createGain();o.type='sine';o.frequency.value=fr;
+      og.gain.setValueAtTime(0,t+dt);og.gain.linearRampToValueAtTime(.5,t+dt+.05);
+      og.gain.exponentialRampToValueAtTime(.001,t+dt+dur);
+      o.connect(og);og.connect(g);o.start(t+dt);o.stop(t+dt+dur+.05);});},
+
+  /* music: bright pluck arpeggio — clean streaming-app feel */
+  vinyl(){const c=A(),t=c.currentTime,g=out(c,.5);
+    // E major pentatonic run: E5 G#5 B5 E6
+    [[659.25,0],[830.61,.09],[987.77,.18],[1318.5,.27]].forEach(([fr,dt])=>{
+      const o=c.createOscillator(),og=c.createGain();
+      o.type='sine';o.frequency.value=fr;
+      const h=c.createOscillator(),hg=c.createGain(); // soft 2nd harmonic = marimba body
+      h.type='sine';h.frequency.value=fr*2;hg.gain.value=.18;
+      og.gain.setValueAtTime(0,t+dt);
+      og.gain.linearRampToValueAtTime(.5,t+dt+.012);
+      og.gain.exponentialRampToValueAtTime(.001,t+dt+.5);
+      o.connect(og);h.connect(hg);hg.connect(og);og.connect(g);
+      o.start(t+dt);o.stop(t+dt+.55);h.start(t+dt);h.stop(t+dt+.55);});},
+
+  /* movies: two-hit sting — tuned for laptop speakers (mids + impact noise) */
+  cinema(){const c=A(),t=c.currentTime,g=out(c,1.0);
+    const hit=(dt,f0,f1,dur,v)=>{
+      // pitched body — fundamentals high enough for small speakers
+      const o=c.createOscillator(),og=c.createGain();
+      o.type='triangle';
+      o.frequency.setValueAtTime(f0,t+dt);
+      o.frequency.exponentialRampToValueAtTime(f1,t+dt+dur);
+      og.gain.setValueAtTime(0,t+dt);
+      og.gain.linearRampToValueAtTime(v,t+dt+.01);
+      og.gain.exponentialRampToValueAtTime(.001,t+dt+dur);
+      o.connect(og);og.connect(g);o.start(t+dt);o.stop(t+dt+dur+.05);
+      // octave layer for presence
+      const o3=c.createOscillator(),og3=c.createGain();
+      o3.type='sine';o3.frequency.setValueAtTime(f0*2,t+dt);
+      o3.frequency.exponentialRampToValueAtTime(f1*2,t+dt+dur);
+      og3.gain.setValueAtTime(0,t+dt);og3.gain.linearRampToValueAtTime(v*.5,t+dt+.01);
+      og3.gain.exponentialRampToValueAtTime(.001,t+dt+dur*.7);
+      o3.connect(og3);og3.connect(g);o3.start(t+dt);o3.stop(t+dt+dur);
+      // noise impact transient = the "thwack" you actually hear
+      const buf=c.createBuffer(1,c.sampleRate*.12,c.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2.5);
+      const n=c.createBufferSource();n.buffer=buf;
+      const nf=c.createBiquadFilter();nf.type='lowpass';nf.frequency.value=1400;
+      const ng=c.createGain();ng.gain.value=v*.8;
+      n.connect(nf);nf.connect(ng);ng.connect(g);n.start(t+dt);};
+    hit(0,  220,90,.55,.9);   // DUM
+    hit(.3, 175,70,1.5,1.0);  // DUMMM
+    // dark swell under second hit, raised into audible range
+    const o2=c.createOscillator(),f=c.createBiquadFilter(),og2=c.createGain();
+    o2.type='sawtooth';o2.frequency.value=110;
+    f.type='lowpass';f.frequency.setValueAtTime(200,t+.3);
+    f.frequency.exponentialRampToValueAtTime(900,t+.75);
+    f.frequency.exponentialRampToValueAtTime(150,t+1.8);
+    og2.gain.setValueAtTime(0,t+.3);og2.gain.linearRampToValueAtTime(.42,t+.5);
+    og2.gain.exponentialRampToValueAtTime(.001,t+1.9);
+    o2.connect(f);f.connect(og2);og2.connect(g);o2.start(t+.3);o2.stop(t+2);},
+
+  /* jet takeoff: dual-layer sweep — rumble + whistle, full volume */
+  jet(){const c=A(),t=c.currentTime,g=out(c,.95);
+    const mkNoise=len=>{const b=c.createBuffer(1,c.sampleRate*len,c.sampleRate);
+      const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b};
+    // layer 1: engine rumble swelling up
+    const n1=c.createBufferSource();n1.buffer=mkNoise(1.3);
+    const f1=c.createBiquadFilter();f1.type='lowpass';
+    f1.frequency.setValueAtTime(300,t);f1.frequency.exponentialRampToValueAtTime(1200,t+1.1);
+    const g1=c.createGain();g1.gain.setValueAtTime(.15,t);
+    g1.gain.linearRampToValueAtTime(.8,t+.55);
+    g1.gain.exponentialRampToValueAtTime(.001,t+1.3);
+    n1.connect(f1);f1.connect(g1);g1.connect(g);n1.start(t);
+    // layer 2: whistle sweep cutting through
+    const n2=c.createBufferSource();n2.buffer=mkNoise(1.2);
+    const f2=c.createBiquadFilter();f2.type='bandpass';f2.Q.value=7;
+    f2.frequency.setValueAtTime(700,t);f2.frequency.exponentialRampToValueAtTime(3800,t+1);
+    const g2=c.createGain();g2.gain.setValueAtTime(.2,t);
+    g2.gain.linearRampToValueAtTime(.65,t+.6);
+    g2.gain.exponentialRampToValueAtTime(.001,t+1.2);
+    n2.connect(f2);f2.connect(g2);g2.connect(g);n2.start(t);
+    // doppler tone passing by
+    const o=c.createOscillator(),og=c.createGain();
+    o.type='sine';o.frequency.setValueAtTime(500,t);
+    o.frequency.exponentialRampToValueAtTime(1400,t+.6);
+    o.frequency.exponentialRampToValueAtTime(650,t+1.1);
+    og.gain.setValueAtTime(0,t);og.gain.linearRampToValueAtTime(.3,t+.4);
+    og.gain.exponentialRampToValueAtTime(.001,t+1.15);
+    o.connect(og);og.connect(g);o.start(t);o.stop(t+1.2);}
+};
+
+document.querySelectorAll('[data-sound]').forEach(card=>{
+  card.addEventListener('click',()=>{
+    try{SOUNDS[card.dataset.sound]();}catch(e){}
+    card.classList.add('played');
+    setTimeout(()=>card.classList.remove('played'),400);
+  });
+});
+
+/* ---------- boot sequence (once per session) ---------- */
+(function(){
+  const boot=document.getElementById('boot');
+  if(reduce||sessionStorage.getItem('booted')){boot.remove();return;}
+  document.body.style.overflow='hidden';
+  const log=document.getElementById('boot-log');
+  const lines=[
+    ['> vuppala.dev — init',120],
+    ['<span class="dim">  loading modules.......</span> <span class="ok">OK</span>',260],
+    ['<span class="dim">  aws credentials.......</span> <span class="ok">OK</span>',180],
+    ['<span class="dim">  llm guardrails........</span> <span class="ok">OK</span>',180],
+    ['<span class="dim">  coffee level..........</span> <span class="ok">98%</span>',200],
+    ['> systems online_',240]
+  ];
+  let html='',i=0;
+  const finish=()=>{
+    sessionStorage.setItem('booted','1');
+    boot.classList.add('done');document.body.style.overflow='';
+    setTimeout(()=>boot.remove(),800);
+  };
+  const next=()=>{
+    if(i>=lines.length){setTimeout(finish,420);return;}
+    html+=lines[i][0]+'\n';
+    log.innerHTML=html+'<span class="cur"></span>';
+    setTimeout(next,lines[i][1]);i++;
+  };
+  next();
+  boot.addEventListener('click',finish);
+})();
+
+/* ---------- command palette ---------- */
+(function(){
+  const pal=document.getElementById('palette'),input=document.getElementById('pal-input'),
+        list=document.getElementById('pal-list'),fab=document.getElementById('pal-fab');
+  const go=sel=>{document.querySelector(sel)?.scrollIntoView({behavior:reduce?'auto':'smooth'});};
+  const CMDS=[
+    {t:'Go to About',k:'NAV',f:()=>go('#about')},
+    {t:'Go to Tech Stack',k:'NAV',f:()=>go('#skills')},
+    {t:'Go to Projects',k:'NAV',f:()=>go('#projects')},
+    {t:'Go to Experience',k:'NAV',f:()=>go('#experience')},
+    {t:'Go to Off Duty',k:'NAV',f:()=>go('#hobbies')},
+    {t:'Go to Contact',k:'NAV',f:()=>go('#contact')},
+    {t:'Download resume',k:'ACTION',f:()=>{const a=document.createElement('a');a.href='resume.pdf';a.download='';a.click();}},
+    {t:'Copy email address',k:'ACTION',f:()=>navigator.clipboard&&navigator.clipboard.writeText('srivatsavavuppala@gmail.com')},
+    {t:'Open GitHub',k:'LINK',f:()=>open('https://github.com/srivatsavavuppala','_blank')},
+    {t:'Open LinkedIn',k:'LINK',f:()=>open('https://linkedin.com/in/srivatsava-vuppala','_blank')},
+    {t:'Send me an email',k:'LINK',f:()=>location.href='mailto:srivatsavavuppala@gmail.com'},
+    {t:'Play a random sound',k:'FUN',f:()=>{const k=Object.keys(SOUNDS);SOUNDS[k[Math.floor(Math.random()*k.length)]]();}}
+  ];
+  let sel=0,view=CMDS;
+  const render=()=>{
+    list.innerHTML=view.length?view.map((c,i)=>
+      `<div class="pal-item${i===sel?' sel':''}" data-i="${i}"><span>${c.t}</span><span class="k">${c.k}</span></div>`).join('')
+      :'<div class="pal-empty">no matching commands</div>';
+    list.querySelectorAll('.pal-item').forEach(el=>{
+      el.addEventListener('mousedown',e=>{e.preventDefault();run(+el.dataset.i);});
+      el.addEventListener('mouseenter',()=>{sel=+el.dataset.i;[...list.children].forEach((n,i)=>n.classList.toggle('sel',i===sel));});
+    });
+  };
+  const run=i=>{view[i]&&view[i].f();close();};
+  const openPal=()=>{pal.classList.add('open');input.value='';view=CMDS;sel=0;render();setTimeout(()=>input.focus(),30);};
+  const close=()=>pal.classList.remove('open');
+  fab.onclick=openPal;
+  pal.onclick=e=>{if(e.target===pal)close();};
+  input.oninput=()=>{const q=input.value.toLowerCase();view=CMDS.filter(c=>c.t.toLowerCase().includes(q));sel=0;render();};
+  addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();pal.classList.contains('open')?close():openPal();return;}
+    if(!pal.classList.contains('open'))return;
+    if(e.key==='Escape')close();
+    else if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,view.length-1);render();}
+    else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,0);render();}
+    else if(e.key==='Enter'){e.preventDefault();run(sel);}
+  });
+})();
+
+/* ---------- telemetry strip ---------- */
+(function(){
+  const tT=document.getElementById('tm-time'),tU=document.getElementById('tm-up'),tS=document.getElementById('tm-scroll');
+  const t0=Date.now();
+  setInterval(()=>{
+    tT.textContent=new Date().toLocaleTimeString('en-IN',{hour12:false,timeZone:'Asia/Kolkata'});
+    const sec=Math.floor((Date.now()-t0)/1000);
+    tU.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+    const max=document.documentElement.scrollHeight-innerHeight;
+    tS.textContent=Math.round(max?scrollY/max*100:0)+'%';
+  },1000);
+})();
+</script>
+</body>
+</html>
